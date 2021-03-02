@@ -18,6 +18,7 @@ void column_operation(int n, int m, float *cost);
 bool assignment_check(int n, int m, float *cost, bool *assign);
 
 
+// O(n*(n+n)) = O(n^2)
 void row_operation(int n, int m, float *cost){
 	for (int i=0; i<n; i++){
 		float minCost = MAX;
@@ -33,6 +34,7 @@ void row_operation(int n, int m, float *cost){
 	}
 }
 
+// O(n*(n+n)) = O(n^2)
 void column_operation(int n, int m, float *cost){
 	for(int j=0; j<m; j++){
 		float minCost = MAX;
@@ -63,8 +65,12 @@ bool assignment_check(int n, int m, float *cost, bool *assign){
 	memset(zeros_cols, 0, sizeof(int)*m);
 	
 	bool chk =true;
+	// 최대 n번 실행
+	// O(n^3)
 	while (chk){
 		chk = false;
+		// 각 row에 candidate 가 1인 cell 할당
+		// O(n^2)
 		for(int i=0; i<n; i++){
 			if (assigned_rows[i]) continue;
 			int cnt = 0;
@@ -84,6 +90,8 @@ bool assignment_check(int n, int m, float *cost, bool *assign){
 			}
 		}
 	
+		// 각 column에 candidate 가 1인 cell 할당
+		// O(n^2)
 		for(int j=0; j<m; j++){
 			if (assigned_cols[j]) continue;
 			int cnt = 0;
@@ -104,6 +112,8 @@ bool assignment_check(int n, int m, float *cost, bool *assign){
 		}
 		
 		if (chk==false){
+			// matrix에 row, column의 candidate가 가장 작은 cell 1개 할당
+			// O(3 * n^2) = O(n^2)
 			memset(zeros_rows, 0, sizeof(int)*n);
 			memset(zeros_cols, 0, sizeof(int)*m);
 			for(int i=0; i<n; i++){
@@ -144,6 +154,8 @@ bool assignment_check(int n, int m, float *cost, bool *assign){
 				chk=true;
 			}
 			else{
+			// cell 1개가할당되지 않았다면, 할당 될수 있는 cell 1개 할당
+			// O(n^2)
 				for (int j=0; j<m; j++){
 					if(chk) break;
 					if(assigned_cols[j]) continue;
@@ -193,6 +205,8 @@ bool assignment_check(int n, int m, float *cost, bool *assign){
 		new_rows.push(i);
 	}
 
+	// drawing line
+	// O(nlogn)
 	while(!new_rows.empty() || !new_cols.empty()){ // 새로운 추가가 있으면 loop
 		while(!new_rows.empty()){
 			int i = new_rows.front();
@@ -218,6 +232,8 @@ bool assignment_check(int n, int m, float *cost, bool *assign){
 		}
 	}
 
+	// shift zeros
+	// O(2*n^2) = O(n^2)
 	float minCost= MAX;
 	for(int i=0; i<n; i++) for(int j=0; j<m; j++) 
 		if(marked_rows[i]&& !marked_cols[j]) minCost=minCost>cost[i*m+j]? cost[i*m+j]:minCost;
