@@ -339,6 +339,7 @@ int main(){
 	dumpmat(n, m, cost);
 	printf("\n");
 
+	// MODE : 0 = minimum cost, 1 = MAXIMUM cost
 	for (int mode=0; mode<2; mode++){
 		for(int i=0; i<n; i++)
 			assignment[i] = -1;
